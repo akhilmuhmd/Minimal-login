@@ -1,0 +1,158 @@
+import React, { useState } from 'react';
+import './App.css';
+import RegistrationForm from './RegistrationForm';
+import LoginForm from './LoginForm';
+import WelcomePage from './WelcomePage';
+
+function App() {
+  const [loggedInUser, setLoggedInUser] = useState(null);
+
+  // Function to handle successful login
+  const handleLogin = (user) => {
+    setLoggedInUser(user);
+  };
+
+  // Function to handle logout
+  const handleLogout = () => {
+    setLoggedInUser(null);
+  };
+
+  return (
+    <div className="App">
+      <h1>Welcome to My App</h1>
+      {loggedInUser ? (
+        <WelcomePage user={loggedInUser} onLogout={handleLogout} />
+      ) : (
+        <>
+          <RegistrationForm />
+          <LoginForm onLogin={handleLogin} />
+        </>
+      )}
+    </div>
+  );
+}
+
+export default App;
+import React, { useState } from 'react';
+
+function RegistrationForm() {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    email: '',
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleRegistration = (event) => {
+    event.preventDefault();
+    // Here, you can add code to check for duplicate users in the backend.
+    // For simplicity, we will assume the registration is successful.
+    alert('Registration successful! You can now login.');
+  };
+
+  return (
+    <div>
+      <h2>User Registration</h2>
+      <form onSubmit={handleRegistration}>
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={formData.username}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email (optional)"
+          value={formData.email}
+          onChange={handleInputChange}
+        />
+        <button type="submit">Register</button>
+      </form>
+    </div>
+  );
+}
+
+export default RegistrationForm;
+import React, { useState } from 'react';
+
+function LoginForm({ onLogin }) {
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    // Here, you can add code to validate user credentials in the backend.
+    // For simplicity, we will assume the login is successful.
+    onLogin(formData.username);
+  };
+
+  return (
+    <div>
+      <h2>User Login</h2>
+      <form onSubmit={handleLogin}>
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={formData.username}
+          onChange={handleInputChange}
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleInputChange}
+          required
+        />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
+}
+
+export default LoginForm;
+import React from 'react';
+
+function WelcomePage({ user, onLogout }) {
+  return (
+    <div>
+      <h2>Welcome {user}</h2>
+      <p>Logged in as: {user}</p>
+      <button onClick={onLogout}>Logout</button>
+      <button>Fetch User Details</button>
+      {/* Implement fetching and displaying user details here */}
+    </div>
+  );
+}
+
+export default WelcomePage;
